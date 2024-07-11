@@ -74,6 +74,11 @@ jobs:
         with:
           name: python-app
 
+      - name: check files
+        shell: bash
+        run: |
+          ls -a
+
       - name: "Run Azure Functions Action"
         uses: Azure/functions-action@v1
         id: fa
