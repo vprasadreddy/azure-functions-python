@@ -1,21 +1,21 @@
 # This is a basic workflow to help you get started with Actions
 
-name: azure-functions-python-deployment
+name: azure-functions-python-code-deployment
 
 env:
   AZURE_CREDENTIALS: "${{secrets.AZURE_CREDENTIALS}}"
   AZURE_FUNCTIONAPP_NAME: "python-function-app"
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: "./release.zip"
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: "."
   AZURE_FUNCTIONAPP_PUBLISH_PROFILE: "${{secrets.PUBLISH_PROFILE}}"
   PYTHON_VERSION: "3.11"
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+  # push:
+  #   branches: ["main"]
+  # pull_request:
+  #   branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -74,6 +74,9 @@ jobs:
         with:
           name: python-app
 
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+
       - name: check files
         shell: bash
         run: |
@@ -81,7 +84,7 @@ jobs:
 
       - name: "Run Azure Functions Action"
         uses: Azure/functions-action@v1
-        id: fa
+        id: deploy-to-function-app
         with:
           app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
           package: "${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}"
