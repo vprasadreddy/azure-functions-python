@@ -1,0 +1,83 @@
+# This is a basic workflow to help you get started with Actions
+
+name: azure-functions-python-deployment
+
+env:
+  AZURE_CREDENTIALS: "${{secrets.AZURE_CREDENTIALS}}"
+  AZURE_FUNCTIONAPP_NAME: "python-function-app"
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: "./release.zip"
+  AZURE_FUNCTIONAPP_PUBLISH_PROFILE: "${{secrets.PUBLISH_PROFILE}}"
+  PYTHON_VERSION: "3.11"
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Python ${{ env.PYTHON_VERSION }} Environment
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Create and start virtual environment
+        run: | #-- 'run' is used to run commands on environment
+          python -m venv .venv 
+          source .venv/bin/activate
+
+      - name: install python dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r #-- package the project
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3 #-- upload the project to be deployed
+        with:
+          name: python-app
+          path: |
+            release.zip
+            !venv/
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: "Download artifact from build job"
+        uses: actions/download-artifact@v3
+        with:
+          name: python-app
+
+      - name: "Run Azure Functions Action"
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          package: "${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}"
+          publish-profile: "${{ secrets.WEBAPP_PUBLISH_PROFILE }}"
