@@ -9,7 +9,7 @@ env:
   AZURE_REGISTRY_LOGIN_SERVER: "demofuncappregistry.azurecr.io"
   AZURE_REGISTRY_SERVER_NAME: "demofuncappregistry"
   AZURE_REGISTRY_USERNAME: demofuncappregistry
-  DOCKER_EXPOSE_PORT: 9090
+  DOCKER_EXPOSE_PORT: 80
 
 # Controls when the workflow will run
 on:
@@ -87,10 +87,10 @@ jobs:
           image: ${{ env.AZURE_REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
       # Run az logout.
-      - name: Update Function App Settings
-        run: |
-          az functionapp config appsettings set --name ${{env.AZURE_FUNCTIONAPP_NAME}} --resource-group ${{env.AZURE_FUNCTIONAPP_RESOURCE_GROUP_NAME}} \
-          --settings PORT=${{env.DOCKER_EXPOSE_PORT}}
+      # - name: Update Function App Settings
+      #   run: |
+      #     az functionapp config appsettings set --name ${{env.AZURE_FUNCTIONAPP_NAME}} --resource-group ${{env.AZURE_FUNCTIONAPP_RESOURCE_GROUP_NAME}} \
+      #     --settings PORT=${{env.DOCKER_EXPOSE_PORT}}
 
       # Remove docker image locally after pushing to ACR
       - name: Remove docker image locally after pushing to ACR
