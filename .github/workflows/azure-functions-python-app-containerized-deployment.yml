@@ -1,13 +1,15 @@
 name: azure-functions-python-app-containerized-deployment
 
 env:
-  AZURE_FUNCTIONAPP_NAME: "azure-func-python-containerized-app"
+  AZURE_FUNCTIONAPP_NAME: "python-container-app"
+  AZURE_FUNCTIONAPP_RESOURCE_GROUP_NAME: "python-container-app-rg"
   PYTHON_VERSION: "3.11"
   IMAGE_NAME: azure-python-function-app
   IMAGE_TAG: v1
-  AZURE_REGISTRY_LOGIN_SERVER: "demofunctionappregistry.azurecr.io"
-  AZURE_REGISTRY_SERVER_NAME: "demofunctionappregistry"
-  AZURE_REGISTRY_USERNAME: demofunctionappregistry
+  AZURE_REGISTRY_LOGIN_SERVER: "demofuncappregistry.azurecr.io"
+  AZURE_REGISTRY_SERVER_NAME: "demofuncappregistry"
+  AZURE_REGISTRY_USERNAME: demofuncappregistry
+  DOCKER_EXPOSE_PORT: 9090
 
 # Controls when the workflow will run
 on:
@@ -83,6 +85,11 @@ jobs:
         with:
           app-name: ${{env.AZURE_FUNCTIONAPP_NAME}}
           image: ${{ env.AZURE_REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+      # Run az logout.
+      - name: Update Function App Settings
+        run: |
+          az functionapp config appsettings set --name ${{env.AZURE_FUNCTIONAPP_NAME}} --resource-group ${{env.AZURE_FUNCTIONAPP_RESOURCE_GROUP_NAME}} --settings PORT=${{env.DOCKER_EXPOSE_PORT}}
 
       # Remove docker image locally after pushing to ACR
       - name: Remove docker image locally after pushing to ACR
