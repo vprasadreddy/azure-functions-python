@@ -1,7 +1,7 @@
 name: azure-functions-python-app-containerized-deployment
 
 env:
-  AZURE_FUNCTIONAPP_NAME: "demo-python-container-app"
+  AZURE_FUNCTIONAPP_NAME: "demo-python-function-app"
   AZURE_FUNCTIONAPP_RESOURCE_GROUP_NAME: "python-container-app-rg"
   PYTHON_VERSION: "3.11"
   IMAGE_NAME: azure-python-function-app
