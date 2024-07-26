@@ -4,8 +4,8 @@ name: azure-functions-python-zip-deployment
 
 env:
   AZURE_CREDENTIALS: "${{secrets.AZURE_CREDENTIALS}}"
-  AZURE_FUNCTIONAPP_NAME: "python-function-app"
-  AZURE_FUNCTIONAPP_RESOURCE_GROUP_NAME: "python-function-app-rg"
+  AZURE_FUNCTIONAPP_NAME: "test-python-func"
+  AZURE_FUNCTIONAPP_RESOURCE_GROUP_NAME: "test-python-func-rg"
   AZURE_FUNCTIONAPP_PACKAGE_PATH: "./release.zip"
   AZURE_FUNCTIONAPP_PUBLISH_PROFILE: "${{secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE}}"
   PYTHON_VERSION: "3.11"
