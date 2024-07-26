@@ -3,10 +3,8 @@
 name: azure-functions-python-code-deployment
 
 env:
-  AZURE_CREDENTIALS: "${{secrets.AZURE_CREDENTIALS}}"
   AZURE_FUNCTIONAPP_NAME: "python-function-app"
   AZURE_FUNCTIONAPP_PACKAGE_PATH: "."
-  AZURE_FUNCTIONAPP_PUBLISH_PROFILE: "${{secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE}}"
   PYTHON_VERSION: "3.11"
 
 # Controls when the workflow will run
@@ -88,4 +86,4 @@ jobs:
         with:
           app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
           package: "${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}"
-          publish-profile: "${{ secrets.WEBAPP_PUBLISH_PROFILE }}"
+          publish-profile: "${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}"
