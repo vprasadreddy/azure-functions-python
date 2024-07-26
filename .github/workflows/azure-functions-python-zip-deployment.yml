@@ -3,8 +3,8 @@
 name: azure-functions-python-zip-deployment
 
 env:
-  AZURE_FUNCTIONAPP_NAME: "test-python-func"
-  AZURE_FUNCTIONAPP_RESOURCE_GROUP_NAME: "test-python-func-rg"
+  AZURE_FUNCTIONAPP_NAME: "test12345hhhh"
+  AZURE_FUNCTIONAPP_RESOURCE_GROUP_NAME: "test-rg"
   AZURE_FUNCTIONAPP_PACKAGE_PATH: "./release.zip"
   PYTHON_VERSION: "3.11"
 
