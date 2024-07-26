@@ -3,7 +3,7 @@
 name: azure-functions-python-code-deployment
 
 env:
-  AZURE_FUNCTIONAPP_NAME: "python-function-app"
+  AZURE_FUNCTIONAPP_NAME: "test-python-func"
   AZURE_FUNCTIONAPP_PACKAGE_PATH: "."
   PYTHON_VERSION: "3.11"
 
