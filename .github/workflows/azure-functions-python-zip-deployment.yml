@@ -47,6 +47,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          # pip install --target="./.python_packages/lib/site-packages" -r ./requirements.txt
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r #-- package the project
