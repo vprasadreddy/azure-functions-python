@@ -3,16 +3,16 @@
 name: azure-functions-python-zip-deployment
 
 env:
-  AZURE_FUNCTIONAPP_NAME: "test12345hhhh"
-  AZURE_FUNCTIONAPP_RESOURCE_GROUP_NAME: "test-rg"
+  AZURE_FUNCTIONAPP_NAME: "demo-func-app-test"
+  AZURE_FUNCTIONAPP_RESOURCE_GROUP_NAME: "demo-func-app-test_group"
   AZURE_FUNCTIONAPP_PACKAGE_PATH: "./release.zip"
   PYTHON_VERSION: "3.11"
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  # push:
-  #   branches: ["main"]
+  push:
+    branches: ["main"]
   # pull_request:
   #   branches: ["main"]
 
@@ -85,7 +85,7 @@ jobs:
         with:
           app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
           package: "${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}"
-          publish-profile: "${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}"
+          # publish-profile: "${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}"
 
       # Deploy Azure Functions using AZ CLI
       # - name: "Deploy Azure Functions using AZ CLI"
