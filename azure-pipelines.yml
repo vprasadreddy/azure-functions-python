@@ -1,0 +1,44 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.7'
+    addToPath: true
+    architecture: 'x64'
+
+- script: |
+    python -m venv .env
+    source .env/bin/activate
+    pip install setuptools
+    pip install -r requirements.txt
+  displayName: 'Run a multi-line script'
+  
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+- task: AzureFunctionApp@2
+  inputs:
+    connectedServiceNameARM: 'azure-pipeline-spn'
+    appType: 'functionAppLinux'
+    appName: 'python-func-app-classic'
+    package: '$(Build.ArtifactStagingDirectory)/**/$(Build.BuildId).zip'
+    deploymentMethod: 'auto'
